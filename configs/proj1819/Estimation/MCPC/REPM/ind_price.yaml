@@ -1,0 +1,70 @@
+name: Industrial Price
+
+
+model_type: regression
+
+
+fit_filters:
+- area > 0
+- year_built > 1940
+- year_built < 2019
+- non_residential_sqft > 1000
+- building_type_name == 'ind'
+- average_value_per_unit > 0
+
+
+predict_filters:
+- building_type_name == 'ind'
+
+
+model_expression: np.log(average_value_per_unit) ~
+    np.log1p(zonal_avg_ind_value) +
+    np.log1p(pct_income_group3_from_within20_PkSov) +
+    np.log1p(building_age) +
+    np.log1p(zonal_manufacturing_jobs_per_acre) + np.log1p(avg_hhsize_hex_nbr) + np.log1p(retl_sb_jobs_cnt_hex_nbr) + np.log1p(off_sb_jobs_cnt_hex_nbr) + np.log1p(wah_jobs_to_within15_OpAuto)
+
+
+
+ytransform: np.exp
+
+
+fitted: true
+
+fit_parameters:
+    Coefficient:
+        Intercept: 1.24722439201788
+        np.log1p(zonal_avg_ind_value): 0.730966353146331
+        np.log1p(pct_income_group3_from_within20_PkSov): 0.636422537081021
+        np.log1p(building_age): -0.0881678326546933
+        np.log1p(zonal_manufacturing_jobs_per_acre): 0.0442867986242646
+        np.log1p(avg_hhsize_hex_nbr): -0.171133905031517
+        np.log1p(retl_sb_jobs_cnt_hex_nbr): -0.0363423866527769
+        np.log1p(off_sb_jobs_cnt_hex_nbr): 0.0217213911973297
+        np.log1p(wah_jobs_to_within15_OpAuto): 0.0389417443156536
+
+    Std. Error:
+        Intercept: 0.0955966539187675
+        np.log1p(zonal_avg_ind_value): 0.0139681345515086
+        np.log1p(pct_income_group3_from_within20_PkSov): 0.0955209736544154
+        np.log1p(building_age): 0.00844442043651207
+        np.log1p(zonal_manufacturing_jobs_per_acre): 0.0102730224476198
+        np.log1p(avg_hhsize_hex_nbr): 0.0393956830533387
+        np.log1p(retl_sb_jobs_cnt_hex_nbr): 0.00663881294157019
+        np.log1p(off_sb_jobs_cnt_hex_nbr): 0.00599068243683192
+        np.log1p(wah_jobs_to_within15_OpAuto): 0.00802318676652997
+
+    T-Score:
+        Intercept: 13.0467368981104
+        np.log1p(zonal_avg_ind_value): 52.3309931222981
+        np.log1p(pct_income_group3_from_within20_PkSov): 6.66264708925109
+        np.log1p(building_age): -10.440957235321
+        np.log1p(zonal_manufacturing_jobs_per_acre): 4.31098041983991
+        np.log1p(avg_hhsize_hex_nbr): -4.34397608488764
+        np.log1p(retl_sb_jobs_cnt_hex_nbr): -5.474229651089
+        np.log1p(off_sb_jobs_cnt_hex_nbr): 3.62586256680578
+        np.log1p(wah_jobs_to_within15_OpAuto): 4.853650481889
+
+
+fit_rsquared_adj: 0.625644710529862
+
+fit_rsquared: 0.626431377804819

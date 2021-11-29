@@ -1,0 +1,232 @@
+name: test hlcm 1
+
+choosers_segmentation_col: income_category
+
+choosers_fit_size: 0.5
+
+choosers_fit_filters:
+- holdback == 0
+- recent_mover == 1
+- income > 1000
+
+alternatives_fit_size: 30
+
+alternatives_fit_filters:
+- residential_units > 0
+- value_per_res_unit > 0
+
+alternatives_capacity_col: vac_res_units
+
+choosers_predict_filters:
+- building_id == -1
+
+alternatives_predict_size: 30
+
+alternatives_predict_filters:
+- vac_res_units > 0
+
+predict_max_iterations: 100
+
+predict_sequential: false
+
+sub_models:
+    income group 1:
+        model_expression:
+            np.log1p(is_mf * 1000) +
+            np.log1p(income * 1.0000 / average_value_per_unit) +
+            np.log1p(sqft_per_res_unit / persons) +
+            np.log1p(average_value_per_unit) +
+            np.log1p(avg_hhsize_hex_nbr) +
+            np.log1p(pct_hh_income1_hex_nbr) +
+            np.log1p(workers_to_within30_PkSov) +
+            np.log1p(zonal_median_income) +
+            np.log1p(zonal_sb_jobs_sector722) +
+            np.log1p(zonal_res_units_vac_rate)+
+            np.log1p(owns * is_rsf) +
+            np.log1p(owns * is_rmf * 1000)
+        fit_parameters:
+            Coefficient:
+                np.log1p(is_mf * 1000): 0.3801276835747402
+                np.log1p(income * 1.0000 / average_value_per_unit): -0.9028857369764958
+                np.log1p(sqft_per_res_unit / persons): -0.0036533755095552703
+                np.log1p(average_value_per_unit): -0.9873216532579466
+                np.log1p(avg_hhsize_hex_nbr): 1.0878794075089349
+                np.log1p(pct_hh_income1_hex_nbr): 0.7211147531061846
+                np.log1p(workers_to_within30_PkSov): 0.147084297094667
+                np.log1p(zonal_median_income): -0.6776283200078435
+                np.log1p(zonal_sb_jobs_sector722): 0.0203102805735773
+                np.log1p(zonal_res_units_vac_rate): -1.4087693654798223
+                np.log1p(owns * is_rsf): -1.3776451852376437
+                np.log1p(owns * is_rmf * 1000): -0.5647867330080955
+            Std. Error:
+                np.log1p(is_mf * 1000): 0.0013230394828402132
+                np.log1p(income * 1.0000 / average_value_per_unit): 0.008810855741252205
+                np.log1p(sqft_per_res_unit / persons): 0.0037818729052956465
+                np.log1p(average_value_per_unit): 0.005360425165178555
+                np.log1p(avg_hhsize_hex_nbr): 0.027138366954878947
+                np.log1p(pct_hh_income1_hex_nbr): 0.045695832883685755
+                np.log1p(workers_to_within30_PkSov): 0.0037702233744694846
+                np.log1p(zonal_median_income): 0.007008493491917408
+                np.log1p(zonal_sb_jobs_sector722): 0.002094328380640782
+                np.log1p(zonal_res_units_vac_rate): 0.11535049240735074
+                np.log1p(owns * is_rsf): 0.015058998601693787
+                np.log1p(owns * is_rmf * 1000): 0.003585585699118544
+            T-Score:
+                np.log1p(is_mf * 1000): 287.3139377206698
+                np.log1p(income * 1.0000 / average_value_per_unit): -102.47423899465377
+                np.log1p(sqft_per_res_unit / persons): -0.9660228148967024
+                np.log1p(average_value_per_unit): -184.1871909100813
+                np.log1p(avg_hhsize_hex_nbr): 40.0863990570131
+                np.log1p(pct_hh_income1_hex_nbr): 15.780755215507531
+                np.log1p(workers_to_within30_PkSov): 39.01209092561088
+                np.log1p(zonal_median_income): -96.68673029222654
+                np.log1p(zonal_sb_jobs_sector722): 9.69775359075407
+                np.log1p(zonal_res_units_vac_rate): -12.21294626558567
+                np.log1p(owns * is_rsf): -91.48318700837721
+                np.log1p(owns * is_rmf * 1000): -157.51589291170444
+        log_likelihoods:
+            convergence: -217172.36081869144
+            'null': -321160.21931226377
+            ratio: 0.32378810400694436
+    income group 2:
+        model_expression: "\n   np.log1p(income*1.0000/average_value_per_unit) \n\
+            \ + np.log1p(age_mean_hex_nbr)\n + np.log1p(average_value_per_unit) \n + np.log1p(avg_rsf_value_to_within20_PkSov)\
+            \  \n + np.log1p(bachelors_degree_hex_nbr)\n + np.log1p(building_age)\n + np.log1p(area)\n\
+            \ + np.log1p(pct_hh_income2_hex_nbr)\n + np.log1p(res_sqft_per_unit)\n + np.log1p(zonal_kids)\n\
+            \ + np.log1p(zonal_retail_jobs_per_acre)\n + np.log1p(zonal_vac_job_spaces_in_civic) \n +\
+            \ np.log1p(zonal_vac_res_units_rsf)\n + np.log1p(zonal_wah_jobs)\n + np.log1p(owns*is_rsf)\n\
+            \ + np.log1p(owns*is_rmf)\n \n    "
+        alternatives_fit_size: 30
+        alternatives_predict_size: 30
+        fit_parameters:
+            Coefficient:
+                np.log1p(income * 1.0000 / average_value_per_unit): -2.249264220807089
+                np.log1p(age_mean_hex_nbr): -0.3075654273116747
+                np.log1p(average_value_per_unit): -1.822655179729161
+                np.log1p(avg_rsf_value_to_within20_PkSov): 0.010389975366436464
+                np.log1p(bachelors_degree_hex_nbr): 0.43674214260275623
+                np.log1p(building_age): -0.34974227708654493
+                np.log1p(area): 0.746619436431689
+                np.log1p(pct_hh_income2_hex_nbr): 1.7490407258067568
+                np.log1p(res_sqft_per_unit): -0.0693536254872131
+                np.log1p(zonal_kids): -0.026381592875607283
+                np.log1p(zonal_retail_jobs_per_acre): 0.43727188152933993
+                np.log1p(zonal_vac_job_spaces_in_civic): -0.04188138311075714
+                np.log1p(zonal_vac_res_units_rsf): -0.05691224641378095
+                np.log1p(zonal_wah_jobs): 0.18349409213267764
+                np.log1p(owns * is_rsf): 1.0261861483968244
+                np.log1p(owns * is_rmf): -0.18263337593934237
+            Std. Error:
+                np.log1p(income * 1.0000 / average_value_per_unit): 0.00793393238779863
+                np.log1p(age_mean_hex_nbr): 0.01464264986386498
+                np.log1p(average_value_per_unit): 0.005174982515957745
+                np.log1p(avg_rsf_value_to_within20_PkSov): 0.002358730691959461
+                np.log1p(bachelors_degree_hex_nbr): 0.0036720020255155013
+                np.log1p(building_age): 0.003617458663422498
+                np.log1p(area): 0.0018948226911959726
+                np.log1p(pct_hh_income2_hex_nbr): 0.04853364342870707
+                np.log1p(res_sqft_per_unit): 0.004014001072157567
+                np.log1p(zonal_kids): 0.003302482856747096
+                np.log1p(zonal_retail_jobs_per_acre): 0.009131157310256334
+                np.log1p(zonal_vac_job_spaces_in_civic): 0.0019717632869887805
+                np.log1p(zonal_vac_res_units_rsf): 0.0021858107701338094
+                np.log1p(zonal_wah_jobs): 0.005021226345833995
+                np.log1p(owns * is_rsf): 0.0078126966014001
+                np.log1p(owns * is_rmf): 0.024686435645020544
+            T-Score:
+                np.log1p(income * 1.0000 / average_value_per_unit): -283.49929276762794
+                np.log1p(age_mean_hex_nbr): -21.004765542518523
+                np.log1p(average_value_per_unit): -352.2050894102081
+                np.log1p(avg_rsf_value_to_within20_PkSov): 4.404901077454176
+                np.log1p(bachelors_degree_hex_nbr): 118.93842638647328
+                np.log1p(building_age): -96.68176187413619
+                np.log1p(area): 394.0312937462441
+                np.log1p(pct_hh_income2_hex_nbr): 36.03769678606532
+                np.log1p(res_sqft_per_unit): -17.277928989175585
+                np.log1p(zonal_kids): -7.988411755630677
+                np.log1p(zonal_retail_jobs_per_acre): 47.887892703172
+                np.log1p(zonal_vac_job_spaces_in_civic): -21.240573545071513
+                np.log1p(zonal_vac_res_units_rsf): -26.037133310628228
+                np.log1p(zonal_wah_jobs): 36.54368066576381
+                np.log1p(owns * is_rsf): 131.3485216119775
+                np.log1p(owns * is_rmf): -7.398126589254331
+        log_likelihoods:
+            convergence: -565791.5347632513
+            'null': -708692.5433127953
+            ratio: 0.20164034445960277
+    income group 3:
+        model_expression: "\n   np.log1p(income*1.0000/average_value_per_unit) \n\
+            \ + np.log1p(sqft_per_res_unit/persons) \n + np.log1p(adults_edu_mean_hex_nbr)\n\
+            \ + np.log1p(average_value_per_unit)\n + np.log1p(age_mean_hex_nbr) \n + np.log1p(avg_hhsize_hex_nbr)\n\
+            \ + np.log1p(bachelors_degree_hex_nbr)\n + np.log1p(building_age)\n + np.log1p(bus_dist)\n\
+            \ + np.log1p(area)\n + np.log1p(zonal_kids)\n + np.log1p(zonal_median_income)\n + np.log1p(zonal_office_jobs_per_acre)\n\
+            \ + np.log1p(zonal_res_adults)\n + np.log1p(zonal_sb_jobs_in_publ)\n + np.log1p(zonal_vac_res_units_rsf)\n\
+            \ + np.log1p(zonal_workers)\n + np.log1p(owns*is_rsf)\n + np.log1p(owns*is_rmf)\n\
+            \ \n    "
+        alternatives_fit_size: 30
+        alternatives_predict_size: 20
+        fit_parameters:
+            Coefficient:
+                np.log1p(income * 1.0000 / average_value_per_unit): -2.1148893253251857
+                np.log1p(sqft_per_res_unit / persons): 0.16401283390771212
+                np.log1p(adults_edu_mean_hex_nbr): 1.7975348282554853
+                np.log1p(average_value_per_unit): -1.2227427629052199
+                np.log1p(age_mean_hex_nbr): -1.3138960355428966
+                np.log1p(avg_hhsize_hex_nbr): -2.1365789770371433
+                np.log1p(bachelors_degree_hex_nbr): 0.22035338644718144
+                np.log1p(building_age): -0.4324470794167474
+                np.log1p(bus_dist): 0.012206523678808447
+                np.log1p(area): 0.6624712341277998
+                np.log1p(zonal_kids): -0.0857875823044264
+                np.log1p(zonal_median_income): 0.5855432325752703
+                np.log1p(zonal_office_jobs_per_acre): 0.2615612979994126
+                np.log1p(zonal_res_adults): -0.342816993605417
+                np.log1p(zonal_sb_jobs_in_publ): 0.019886419771825918
+                np.log1p(zonal_vac_res_units_rsf): -0.05212891140235183
+                np.log1p(zonal_workers): 0.593257001133678
+                np.log1p(owns * is_rsf): 0.32918886237654676
+                np.log1p(owns * is_rmf): -0.20275418492568076
+            Std. Error:
+                np.log1p(income * 1.0000 / average_value_per_unit): 0.012292860690298274
+                np.log1p(sqft_per_res_unit / persons): 0.005641168567278246
+                np.log1p(adults_edu_mean_hex_nbr): 0.08059838138568146
+                np.log1p(average_value_per_unit): 0.009037405321181493
+                np.log1p(age_mean_hex_nbr): 0.04207737468238323
+                np.log1p(avg_hhsize_hex_nbr): 0.043458258741636245
+                np.log1p(bachelors_degree_hex_nbr): 0.0066147991841862585
+                np.log1p(building_age): 0.005273414767344588
+                np.log1p(bus_dist): 0.0032077850936876066
+                np.log1p(area): 0.0030707541343893228
+                np.log1p(zonal_kids): 0.00921139095668628
+                np.log1p(zonal_median_income): 0.01399596173773144
+                np.log1p(zonal_office_jobs_per_acre): 0.008899685262861742
+                np.log1p(zonal_res_adults): 0.023661975590622122
+                np.log1p(zonal_sb_jobs_in_publ): 0.004980114671674011
+                np.log1p(zonal_vac_res_units_rsf): 0.0029739265574360383
+                np.log1p(zonal_workers): 0.028526438242344354
+                np.log1p(owns * is_rsf): 0.011857606465478282
+                np.log1p(owns * is_rmf): 0.034323520585810056
+            T-Score:
+                np.log1p(income * 1.0000 / average_value_per_unit): -172.04208024534847
+                np.log1p(sqft_per_res_unit / persons): 29.074265722012473
+                np.log1p(adults_edu_mean_hex_nbr): 22.302368823684873
+                np.log1p(average_value_per_unit): -135.2979886870191
+                np.log1p(age_mean_hex_nbr): -31.22571323569274
+                np.log1p(avg_hhsize_hex_nbr): -49.16393428782598
+                np.log1p(bachelors_degree_hex_nbr): 33.31218081026128
+                np.log1p(building_age): -82.00513301071231
+                np.log1p(bus_dist): 3.805281003028812
+                np.log1p(area): 215.73568092241442
+                np.log1p(zonal_kids): -9.313206084489954
+                np.log1p(zonal_median_income): 41.836584262495926
+                np.log1p(zonal_office_jobs_per_acre): 29.389949225609595
+                np.log1p(zonal_res_adults): -14.488096832509818
+                np.log1p(zonal_sb_jobs_in_publ): 3.9931650339170437
+                np.log1p(zonal_vac_res_units_rsf): -17.52864786522994
+                np.log1p(zonal_workers): 20.79674287037536
+                np.log1p(owns * is_rsf): 27.76183063040023
+                np.log1p(owns * is_rmf): -5.907150008659161
+        log_likelihoods:
+            convergence: -316423.9640109629
+            'null': -351049.6439401108
+            ratio: 0.0986347102948637

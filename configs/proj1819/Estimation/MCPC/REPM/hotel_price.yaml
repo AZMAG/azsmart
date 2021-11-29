@@ -1,0 +1,57 @@
+name: Hotel Price
+
+
+model_type: regression
+
+
+fit_filters:
+- area > 0
+- year_built > 1940
+- year_built < 2019
+- non_residential_sqft > 1000
+- building_type_name == 'hot'
+- average_value_per_unit > 0
+
+
+predict_filters:
+- building_type_name == 'hot'
+
+
+model_expression: np.log(average_value_per_unit) ~ 
+    np.log1p(zonal_avg_hot_value) + np.log1p(manufacturing_jobs_to_within20_PkSov) + 
+    np.log1p(zonal_sb_jobs_in_publ) + np.log1p(is_MC) + np.log1p(building_age)
+
+ytransform: np.exp
+
+
+fitted: true
+
+
+fit_parameters:
+    Coefficient:
+        Intercept: 0.990971379498941
+        np.log1p(zonal_avg_hot_value): 0.793882111587742
+        np.log1p(manufacturing_jobs_to_within20_PkSov): -0.0112323739073773
+        np.log1p(zonal_sb_jobs_in_publ): 0.0648937165402571
+        np.log1p(is_MC): 0.385798917159346
+        np.log1p(building_age): -0.0704686398956456
+
+    Std. Error:
+        Intercept: 0.121737768282248
+        np.log1p(zonal_avg_hot_value): 0.0213013403288976
+        np.log1p(manufacturing_jobs_to_within20_PkSov): 0.00697229975685196
+        np.log1p(zonal_sb_jobs_in_publ): 0.0102002371751292
+        np.log1p(is_MC): 0.0789781056720495
+        np.log1p(building_age): 0.0151627174794239
+
+    T-Score:
+        Intercept: 8.14021312762511
+        np.log1p(zonal_avg_hot_value): 37.2691154326452
+        np.log1p(manufacturing_jobs_to_within20_PkSov): -1.61099985644461
+        np.log1p(zonal_sb_jobs_in_publ): 6.36198114083904
+        np.log1p(is_MC): 4.88488441038769
+        np.log1p(building_age): -4.64749409143004
+
+fit_rsquared_adj: 0.786730494086932
+
+fit_rsquared: 0.788540931318792

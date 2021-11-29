@@ -1,0 +1,77 @@
+name: Warehouse Price
+
+
+model_type: regression
+
+
+fit_filters:
+- area > 0
+- year_built > 1940
+- year_built < 2019
+- non_residential_sqft > 1000
+- building_type_name == 'ware'
+- average_value_per_unit > 0
+
+
+predict_filters:
+- building_type_name == 'ware'
+
+
+model_expression: np.log(average_value_per_unit) ~
+    np.log1p(zonal_avg_ware_value) + 
+    np.log1p(pct_hh_income3_hex_nbr) + 
+    np.log1p(building_age) + 
+    np.log1p(is_MC) + 
+    np.log1p(zonal_vac_job_spaces_in_ag) + 
+    np.log1p(zonal_job_spaces) + 
+    np.log1p(retl_sb_jobs_cnt_hex_nbr) + 
+    np.log1p(grad_degree_hex_nbr)
+
+
+
+ytransform: np.exp
+
+
+fitted: true
+
+fit_parameters:
+    Coefficient: 
+        Intercept: 0.971540056332376
+        np.log1p(zonal_avg_ware_value): 0.73962078278204
+        np.log1p(pct_hh_income3_hex_nbr): 0.396490479036857
+        np.log1p(building_age): -0.0897640217773893
+        np.log1p(is_MC): 0.324230465367785
+        np.log1p(zonal_vac_job_spaces_in_ag): -0.0469000764401673
+        np.log1p(zonal_job_spaces): 0.0268317788163126
+        np.log1p(retl_sb_jobs_cnt_hex_nbr): -0.0190092099347984
+        np.log1p(grad_degree_hex_nbr): 0.0164186095169138
+
+
+    Std. Error:
+        Intercept: 0.0496650553687006
+        np.log1p(zonal_avg_ware_value): 0.0102791071918165
+        np.log1p(pct_hh_income3_hex_nbr): 0.0513097206957261
+        np.log1p(building_age): 0.00695987938681778
+        np.log1p(is_MC): 0.0275592672070315
+        np.log1p(zonal_vac_job_spaces_in_ag): 0.0107392667447736
+        np.log1p(zonal_job_spaces): 0.00432787947517536
+        np.log1p(retl_sb_jobs_cnt_hex_nbr): 0.00428928091477875
+        np.log1p(grad_degree_hex_nbr): 0.00451333476781876
+
+
+    T-Score:
+        Intercept: 19.5618438179503
+        np.log1p(zonal_avg_ware_value): 71.9537960817137
+        np.log1p(pct_hh_income3_hex_nbr): 7.72739499768673
+        np.log1p(building_age): -12.8973530701416
+        np.log1p(is_MC): 11.7648434892006
+        np.log1p(zonal_vac_job_spaces_in_ag): -4.36715816403311
+        np.log1p(zonal_job_spaces): 6.19975185774448
+        np.log1p(retl_sb_jobs_cnt_hex_nbr): -4.43179411945298
+        np.log1p(grad_degree_hex_nbr): 3.63780006614682
+
+
+
+fit_rsquared_adj: 0.52518205097341
+
+fit_rsquared: 0.525557030597518

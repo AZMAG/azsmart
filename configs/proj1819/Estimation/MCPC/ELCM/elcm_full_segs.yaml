@@ -1,0 +1,471 @@
+name: test elcm 1
+
+choosers_segmentation_col: model_sector
+
+choosers_fit_size: 0.999999
+
+choosers_fit_filters:
+- holdback == 0
+- job_class == 'site based'
+
+alternatives_fit_size: 20
+
+alternatives_fit_filters:
+- non_residential_sqft > 0
+- average_value_per_unit > 0
+
+alternatives_capacity_col: vac_job_spaces
+
+choosers_predict_filters:
+- building_id == -1
+
+alternatives_predict_size: 30
+
+alternatives_predict_filters:
+- vac_job_spaces > 0
+
+predict_max_iterations: 100
+
+predict_sequential: false
+
+sub_models:
+    agriculture:
+        model_expression: "\n   np.log1p(area)                                       \
+            \                   \n + np.log1p(building_age)                          \
+            \                                                   \n + np.log1p(zonal_job_spaces_in_ag)\
+            \ \n + np.log1p(zonal_res_units_per_acre) \n + np.log1p(zonal_vac_job_spaces_in_ag)\n\n  \
+            \  "
+        alternatives_fit_filters: building_type_name in ('retl', 'ware', 'ind', 'off',
+            'ag', 'stor')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('retl', 'ware', 'ind', 'off', 'ag', 'stor')
+        fit_parameters:
+            Coefficient:
+                np.log1p(area): 0.33206942406978973
+                np.log1p(building_age): 0.29225782023005475
+                np.log1p(zonal_job_spaces_in_ag): 1.01269511017992
+                np.log1p(zonal_res_units_per_acre): -0.5747951650258936
+                np.log1p(zonal_vac_job_spaces_in_ag): -0.5678503273264498
+            Std. Error:
+                np.log1p(area): 0.007285593836904553
+                np.log1p(building_age): 0.02856002389662031
+                np.log1p(zonal_job_spaces_in_ag): 0.014463542231948793
+                np.log1p(zonal_res_units_per_acre): 0.0409807420651692
+                np.log1p(zonal_vac_job_spaces_in_ag): 0.024557164621551008
+            T-Score:
+                np.log1p(area): 45.57890976404976
+                np.log1p(building_age): 10.233108392624262
+                np.log1p(zonal_job_spaces_in_ag): 70.01708806456544
+                np.log1p(zonal_res_units_per_acre): -14.02598235317046
+                np.log1p(zonal_vac_job_spaces_in_ag): -23.12361121805213
+        log_likelihoods:
+            convergence: -5346.555024731004
+            'null': -11124.684987441362
+            ratio: 0.5193971756713363
+    construction:
+        model_expression: "\n   np.log1p(zonal_income_group_3)\n + np.log1p(zonal_construction_jobs)\n\
+            \ + np.log1p(zonal_office_jobs)\n + np.log1p(zonal_sb_jobs_in_util)\n + np.log1p(zonal_vac_job_spaces_in_ware)\n\
+            \ + np.log1p(zonal_bldg_sqft_per_landarea)\n + np.log1p(area) \n\n    "
+        alternatives_fit_filters: building_type_name in ('retl', 'ware', 'ind', 'off',
+            'stor')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('retl', 'ware', 'ind', 'off', 'stor')
+            
+        fit_parameters:
+            Coefficient:
+                np.log1p(zonal_income_group_3): -0.008166247681515226
+                np.log1p(zonal_construction_jobs): 0.9571394189410639
+                np.log1p(zonal_office_jobs): -0.114278112250374
+                np.log1p(zonal_sb_jobs_in_util): 0.0450662553702991
+                np.log1p(zonal_vac_job_spaces_in_ware): -0.2646590613852956
+                np.log1p(zonal_bldg_sqft_per_landarea): 0.7204999305329647
+                np.log1p(area): 0.3081315230287774
+            Std. Error:
+                np.log1p(zonal_income_group_3): 0.002889757946030378
+                np.log1p(zonal_construction_jobs): 0.006834445957548573
+                np.log1p(zonal_office_jobs): 0.0055137964499807615
+                np.log1p(zonal_sb_jobs_in_util): 0.0060856795013252245
+                np.log1p(zonal_vac_job_spaces_in_ware): 0.004425861351896569
+                np.log1p(zonal_bldg_sqft_per_landarea): 0.07071381777709988
+                np.log1p(area): 0.0025557070249583075
+            T-Score:
+                np.log1p(zonal_income_group_3): -2.8259279268469846
+                np.log1p(zonal_construction_jobs): 140.04638048003198
+                np.log1p(zonal_office_jobs): -20.72584892951076
+                np.log1p(zonal_sb_jobs_in_util): 7.405295556640048
+                np.log1p(zonal_vac_job_spaces_in_ware): -59.798317286167126
+                np.log1p(zonal_bldg_sqft_per_landarea): 10.188955329835027
+                np.log1p(area): 120.56605863647617
+        log_likelihoods:
+            convergence: -56028.442793941715
+            'null': -82552.22589887217
+            ratio: 0.3212970070294958
+    education:
+        model_expression: "\n   np.log1p(age_restricted)\n + np.log1p(area)    \n + np.log1p(avg_edu_value_from_within30_PkSov)\
+            \    \n + np.log1p(avg_hhsize_hex_nbr)         \n + np.log1p(building_age)         \
+            \            \n + np.log1p(bus_dist)  \n + np.log1p(zonal_k12)\n + np.log1p(zonal_posths)\n +\
+            \ np.log1p(kids_hex_nbr)\n\n\n    "
+        alternatives_fit_filters: building_type_name in ('retl', 'off', 'edu')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('retl', 'off', 'edu')
+        
+        fit_parameters:
+            Coefficient:
+                np.log1p(age_restricted): -2.49610844011567
+                np.log1p(area): 0.8704605198055193
+                np.log1p(avg_edu_value_from_within30_PkSov): -0.08508784673094737
+                np.log1p(avg_hhsize_hex_nbr): -1.28193095689652
+                np.log1p(building_age): -0.3751426687455744
+                np.log1p(bus_dist): 0.17128578541442835
+                np.log1p(zonal_k12): 0.22211537822816962
+                np.log1p(zonal_posths): 0.2270013770431779
+                np.log1p(kids_hex_nbr): 0.47967581358846456
+            Std. Error:
+                np.log1p(age_restricted): 0.06373007505097364
+                np.log1p(area): 0.0028878540626757735
+                np.log1p(avg_edu_value_from_within30_PkSov): 0.002468047711846862
+                np.log1p(avg_hhsize_hex_nbr): 0.030530634742607973
+                np.log1p(building_age): 0.005364704595953927
+                np.log1p(bus_dist): 0.0036822899797356525
+                np.log1p(zonal_k12): 0.0015550632783013004
+                np.log1p(zonal_posths): 0.0013139469072189116
+                np.log1p(kids_hex_nbr): 0.005037130445048426
+            T-Score:
+                np.log1p(age_restricted): -39.16688373768886
+                np.log1p(area): 301.42122867489513
+                np.log1p(avg_edu_value_from_within30_PkSov): -34.475770594919084
+                np.log1p(avg_hhsize_hex_nbr): -41.988349331875554
+                np.log1p(building_age): -69.92792651220869
+                np.log1p(bus_dist): 46.516104477661145
+                np.log1p(zonal_k12): 142.83365913623857
+                np.log1p(zonal_posths): 172.76297527397588
+                np.log1p(kids_hex_nbr): 95.22799117898425
+        log_likelihoods:
+            convergence: -145130.54735735155
+            'null': -265993.8363390245
+            ratio: 0.45438379567421894
+    hotel arts ent:
+        model_expression: "\n   np.log1p(area)  \n + np.log1p(freeway_dist)         \n +\
+            \ np.log1p(res_adults_hex_nbr)    \n + np.log1p(wah_jobs_from_within30_PkSov)\n + np.log1p(zonal_hotel_arts_ent_jobs)\n\
+            \ + np.log1p(zonal_office_jobs_per_acre)\n + np.log1p(is_tribe)\n\n   "
+        alternatives_fit_filters: building_type_name in ('retl', 'off', 'civic', 'hot')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('retl', 'off', 'civic', 'hot')
+        
+        fit_parameters:
+            Coefficient:
+                np.log1p(area): 0.5139229838600632
+                np.log1p(freeway_dist): -0.025990690790619882
+                np.log1p(res_adults_hex_nbr): 0.2227308301761621
+                np.log1p(wah_jobs_from_within30_PkSov): -0.09773925341389163
+                np.log1p(zonal_hotel_arts_ent_jobs): 1.0356231584486213
+                np.log1p(zonal_office_jobs_per_acre): 0.05021192412252284
+                np.log1p(is_tribe): 1.6807352696136768
+            Std. Error:
+                np.log1p(area): 0.004222974855123572
+                np.log1p(freeway_dist): 0.005154256244389471
+                np.log1p(res_adults_hex_nbr: 0.01021626826485688
+                np.log1p(wah_jobs_from_within30_PkSov): 0.009617797773169285
+                np.log1p(zonal_hotel_arts_ent_jobs): 0.0070991823754869565
+                np.log1p(zonal_office_jobs_per_acre): 0.008479862126719986
+                np.log1p(is_tribe): 0.09312702122801536
+            T-Score:
+                np.log1p(area): 121.69690833857094
+                np.log1p(freeway_dist): -5.042568618685064
+                np.log1p(res_adults_hex_nbr): 21.8015839445346
+                np.log1p(wah_jobs_from_within30_PkSov): -10.162331930762182
+                np.log1p(zonal_hotel_arts_ent_jobs): 145.8792158973919
+                np.log1p(zonal_office_jobs_per_acre): 5.921313739796006
+                np.log1p(is_tribe): 18.047772251820525
+        log_likelihoods:
+            convergence: -38545.83623041538
+            'null': -89055.32582584964
+            ratio: 0.5671697804374674
+    manufacturing:
+        model_expression: "\n   np.log1p(age_restricted)                         \n +\
+            \ np.log1p(area)     \n + np.log1p(average_value_per_unit)                   \
+            \                              \n + np.log1p(res_units_agg_to_within15_PkSov)\n\
+            \ + np.log1p(zonal_manufacturing_jobs)\n + np.log1p(zonal_office_jobs_per_acre)\n\n   "
+        alternatives_fit_filters: building_type_name in ('retl', 'ware', 'ind', 'off',
+            'stor')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('retl', 'ware', 'ind', 'off', 'stor')
+            
+        fit_parameters:
+            Coefficient:
+                np.log1p(age_restricted): -2.005858234278252
+                np.log1p(area): 0.5935233581246218
+                np.log1p(average_value_per_unit): -0.31429992970172255
+                np.log1p(res_units_agg_to_within15_PkSov): 0.06813334231791411
+                np.log1p(zonal_manufacturing_jobs): 0.7090272158218751
+                np.log1p(zonal_office_jobs_per_acre): 0.26204789080894314
+            Std. Error:
+                np.log1p(age_restricted): 0.14112263523140794
+                np.log1p(area): 0.0028568015744765483
+                np.log1p(average_value_per_unit): 0.006377982395723842
+                np.log1p(res_units_agg_to_within15_PkSov): 0.0035631177197272546
+                np.log1p(zonal_manufacturing_jobs): 0.003944957221026643
+                np.log1p(zonal_office_jobs_per_acre): 0.006015766094672364
+            T-Score:
+                np.log1p(age_restricted): -14.213582611953893
+                np.log1p(area): 207.75799181410525
+                np.log1p(average_value_per_unit): -49.278895769992545
+                np.log1p(res_units_agg_to_within15_PkSov): 19.12183309035591
+                np.log1p(zonal_manufacturing_jobs): 179.7300138117484
+                np.log1p(zonal_office_jobs_per_acre): 43.56018613174072
+        log_likelihoods:
+            convergence: -112650.25406978697
+            'null': -229453.47804146018
+            ratio: 0.5090496991750455
+    medical:
+        model_expression: "\n   np.log1p(age_mean_hex_nbr)\n + np.log1p(area)   \n + np.log1p(building_age)\
+            \                                   \n + np.log1p(sb_jobs_sector62_from_within5_PkSov)\n\
+            \ + np.log1p(persons_hex_nbr)\n + np.log1p(average_value_per_unit)\n\
+            \ + np.log1p(zonal_vac_job_spaces_in_med)\n \n    "
+        choosers_fit_size: 0.6
+        alternatives_fit_filters: building_type_name in ('med', 'gq')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('med', 'gq')
+            
+        fit_parameters:
+            Coefficient:
+                np.log1p(age_mean_hex_nbr): 1.108359996468045
+                np.log1p(area): 0.8559500293980655
+                np.log1p(building_age): -0.5509448108060246
+                np.log1p(sb_jobs_sector62_from_within5_PkSov): -0.051647781916482546
+                np.log1p(persons_hex_nbr): 1.047060921990002
+                np.log1p(average_value_per_unit): -0.07789082425564732
+                np.log1p(zonal_vac_job_spaces_in_med): 0.07137266608409652
+            Std. Error:
+                np.log1p(age_mean_hex_nbr): 0.018748321590534838
+                np.log1p(area): 0.0028301369633670632
+                np.log1p(building_age): 0.007294323433347272
+                np.log1p(sb_jobs_sector62_from_within5_PkSov): 0.0017400523479107527
+                np.log1p(persons_hex_nbr): 0.006384707137478919
+                np.log1p(average_value_per_unit): 0.001950408755050463
+                np.log1p(zonal_vac_job_spaces_in_med): 0.0023840001111618938
+            T-Score:
+                np.log1p(age_mean_hex_nbr): 59.11782508721233
+                np.log1p(area): 302.44120354504923
+                np.log1p(building_age): -75.53062540211533
+                np.log1p(sb_jobs_sector62_from_within5_PkSov): -29.681740309994147
+                np.log1p(persons_hex_nbr): 163.99513704295717
+                np.log1p(average_value_per_unit_log1p): -39.93564121056873
+                np.log1p(zonal_vac_job_spaces_in_med): 29.938197464811157
+        log_likelihoods:
+            convergence: -97544.2586327338
+            'null': -180043.92339965628
+            ratio: 0.4582196566767328
+    mining:
+        model_expression: "\n   np.log1p(area) \n + np.log1p(zonal_mining_jobs)\n + np.log1p(zonal_sb_jobs_sector48)\n\
+            \ + np.log1p(zonal_avg_rmf_value)\n   "
+        alternatives_fit_filters: building_type_name in ('ware', 'ind', 'off', 'stor')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('ware', 'ind', 'off', 'stor')
+        
+        fit_parameters:
+            Coefficient:
+                np.log1p(area): 0.5471553422289485
+                np.log1p(zonal_mining_jobs): 1.7282617449895747
+                np.log1p(zonal_sb_jobs_sector48): -0.16948448691350562
+                np.log1p(zonal_avg_rmf_value): 0.6203162193854281
+            Std. Error:
+                np.log1p(area): 0.04809136814875759
+                np.log1p(zonal_mining_jobs): 0.05814654786965585
+                np.log1p(zonal_sb_jobs_sector48): 0.028410216250793246
+                np.log1p(zonal_avg_rmf_value): 0.0533242043230013
+            T-Score:
+                np.log1p(area): 11.377412689455454
+                np.log1p(zonal_mining_jobs): 29.72251678403559
+                np.log1p(zonal_sb_jobs_sector48): -5.965617629143299
+                np.log1p(zonal_avg_rmf_value): 11.63292030815837
+        log_likelihoods:
+            convergence: -366.23104331694964
+            'null': -4490.670595642052
+            ratio: 0.9184462463863734
+    office:
+        model_expression: "\n + np.log1p(area)  \n + np.log1p(cbd_dist)    \n + np.log1p(sb_jobs_sector71_from_within30_OpAuto)\n\
+            \ + np.log1p(sb_jobs_sector92_to_within20_OpAuto) \n + np.log1p(zonal_office_jobs)\n\n    "
+        choosers_fit_size: 0.3
+        alternatives_fit_filters: building_type_name in ('retl', 'ware', 'ind', 'off',
+            'stor', 'civic', 'publ')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('retl', 'ware', 'ind', 'off', 'stor', 'civic', 'publ')
+            
+        fit_parameters:
+            Coefficient:
+                np.log1p(area): 0.4710978716503815
+                np.log1p(cbd_dist): -0.3845512575605478
+                np.log1p(sb_jobs_sector71_from_within30_OpAuto): 0.12183301312408504
+                np.log1p(sb_jobs_sector92_to_within20_OpAuto): -0.2558578841878064
+                np.log1p(zonal_office_jobs): 0.8369264105496603
+            Std. Error:
+                np.log1p(area): 0.0024187256884883766
+                np.log1p(cbd_dist): 0.003486763168076358
+                np.log1p(sb_jobs_sector71_from_within30_OpAuto): 0.006354055723029837
+                np.log1p(sb_jobs_sector92_to_within20_OpAuto): 0.004378102963485664
+                np.log1p(zonal_office_jobs): 0.0029779246222986547
+            T-Score:
+                np.log1p(area): 194.77110359910307
+                np.log1p(cbd_dist): -110.28889517973892
+                np.log1p(sb_jobs_sector71_from_within30_OpAuto): 19.174054876873313
+                np.log1p(sb_jobs_sector92_to_within20_OpAuto): -58.440353349776636
+                np.log1p(zonal_office_jobs): 281.0435174492893
+        log_likelihoods:
+            convergence: -188615.91480126284
+            'null': -285694.9410335345
+            ratio: 0.3397995984145783
+    retail:
+        model_expression: "\n   np.log1p(area)                       \n + np.log1p(bus_dist)\
+            \                                                                \n +\
+            \ np.log1p(income3_hex_nbr)                                                    \
+            \                                                                    \
+            \               \n + np.log1p(res_adults_hex_nbr)                           \n +\
+            \ np.log1p(sb_jobs_sector61_to_within5_OpAuto)\n + np.log1p(zonal_retail_jobs)\n + np.log1p(zonal_vac_job_spaces_in_retl)\n\
+            \ + np.log1p(average_value_per_unit)\n + np.log1p(building_age)\n + np.log1p(zonal_job_spaces)\n\
+            \ + np.log1p(zonal_nonres_sqft_in_retl)\n + np.log1p(zonal_office_jobs_per_acre)\n + np.log1p(zonal_warehouse_and_transport_jobs)\n\
+            \ + np.log1p(zonal_sb_jobs_sector53)\n\n    "
+        choosers_fit_size: 0.5
+        alternatives_fit_filters: building_type_name in ('retl', 'ware', 'ind', 'off',
+            'stor')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('retl', 'ware', 'ind', 'off', 'stor')
+            
+        fit_parameters:
+            Coefficient:
+                np.log1p(area): 0.520936821914433
+                np.log1p(bus_dist): -0.1398763682390144
+                np.log1p(income3_hex_nbr): 0.2086086467159475
+                np.log1p(res_adults_hex_nbr): -0.026004990351048692
+                np.log1p(sb_jobs_sector61_to_within5_OpAuto): 0.005762852047111645
+                np.log1p(zonal_retail_jobs): 0.6887500272577142
+                np.log1p(zonal_vac_job_spaces_in_retl): -0.1642137874363501
+                np.log1p(average_value_per_unit): 0.11312786185568571
+                np.log1p(building_age): -0.2955235448011691
+                np.log1p(zonal_job_spaces): -0.3364740191475654
+                np.log1p(zonal_nonres_sqft_in_retl): 0.08779166696804777
+                np.log1p(zonal_office_jobs_per_acre): 0.0229732231465728
+                np.log1p(zonal_warehouse_and_transport_jobs): 0.06116776025679381
+                np.log1p(zonal_sb_jobs_sector53): -0.08424929308950346
+            Std. Error:
+                np.log1p(area): 0.0021854143531483588
+                np.log1p(bus_dist): 0.002161542324051814
+                np.log1p(income3_hex_nbr): 0.005108487677966172
+                np.log1p(res_adults_hex_nbr): 0.005787805575704624
+                np.log1p(sb_jobs_sector61_to_within5_OpAuto): 0.0016317566657901262
+                np.log1p(zonal_retail_jobs): 0.0036435209954562425
+                np.log1p(zonal_vac_job_spaces_in_retl): 0.002664991543174353
+                np.log1p(average_value_per_unit): 0.004114473027563072
+                np.log1p(building_age): 0.0046972248795572515
+                np.log1p(zonal_job_spaces): 0.005699948076548108
+                np.log1p(zonal_nonres_sqft_in_retl): 0.0040405302536008205
+                np.log1p(zonal_office_jobs_per_acre): 0.006565121032064634
+                np.log1p(zonal_warehouse_and_transport_jobs): 0.0019273907637832874
+                np.log1p(zonal_sb_jobs_sector53): 0.0023401926568540473
+            T-Score:
+                np.log1p(area): 238.3698181372147
+                np.log1p(bus_dist): -64.71137145111088
+                np.log1p(income3_hex_nbr): 40.83569538901194
+                np.log1p(res_adults_hex_nbr): -4.493065637900729
+                np.log1p(sb_jobs_sector61_to_within5_OpAuto): 3.5316859234775473
+                np.log1p(zonal_retail_jobs): 189.0341864687042
+                np.log1p(zonal_vac_job_spaces_in_retl): -61.618877499607386
+                np.log1p(average_value_per_unit): 27.49510352792112
+                np.log1p(building_age): -62.914497895835126
+                np.log1p(zonal_job_spaces): -59.03106741129022
+                np.log1p(zonal_nonres_sqft_in_retl): 21.727758847940816
+                np.log1p(zonal_office_jobs_per_acre): 3.4992840245243824
+                np.log1p(zonal_warehouse_and_transport_jobs): 31.736045127002285
+                np.log1p(zonal_sb_jobs_sector53): -36.001007371231104
+        log_likelihoods:
+            convergence: -269390.8266836937
+            'null': -383822.94372377655
+            ratio: 0.2981377713637554
+    utilities:
+        model_expression: "                                              \n   np.log1p(zonal_utilities_jobs)\n\
+            \ + np.log1p(zonal_job_spaces_in_retl)\n + np.log1p(workers_hex_nbr)\n + np.log1p(area)\n   "
+        alternatives_fit_filters: building_type_name in ('retl', 'ware', 'ind', 'off',
+            'stor')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('retl', 'ware', 'ind', 'off', 'stor')
+            
+        fit_parameters:
+            Coefficient:
+                np.log1p(zonal_utilities_jobs): 1.0957956369995574
+                np.log1p(zonal_job_spaces_in_retl): -0.35152516772940745
+                np.log1p(workers_hex_nbr): 0.3049261515301026
+                np.log1p(area): 0.6341644489306796
+            Std. Error:
+                np.log1p(zonal_utilities_jobs): 0.024390068220080344
+                np.log1p(zonal_job_spaces_in_retl): 0.025312828564482956
+                np.log1p(workers_hex_nbr): 0.027365815306395154
+                np.log1p(area): 0.01647039556403969
+            T-Score:
+                np.log1p(zonal_utilities_jobs): 44.9279447319212
+                np.log1p(zonal_job_spaces_in_retl): -13.887233772943137
+                np.log1p(workers_hex_nbr): 11.142593345605311
+                np.log1p(area): 38.503291949785954
+        log_likelihoods:
+            convergence: -1598.8923558576357
+            'null': -8655.577290447693
+            ratio: 0.8152760581755563
+    warehouse and transport:
+        model_expression: "                     \n   np.log1p(area)                  \
+            \                               \n + np.log1p(average_value_per_unit)    \
+            \                                      \n + np.log1p(building_age)       \
+            \                                                                    \
+            \        \n + np.log1p(zonal_job_spaces)\n + np.log1p(zonal_nonres_sqft_in_retl)\n + np.log1p(zonal_office_jobs_per_acre)\n\
+            \ +  np.log1p(zonal_warehouse_and_transport_jobs)\n +  np.log1p(zonal_sb_jobs_sector53)\n +\
+            \ np.log1p(zonal_income_group_3)\n\n    "
+        choosers_fit_size: 0.6
+        alternatives_fit_filters: building_type_name in ('retl', 'ware', 'ind', 'off',
+            'stor', 'publ')
+        alternatives_predict_filters:
+            - vac_job_spaces > 0
+            - building_type_name in ('retl', 'ware', 'ind', 'off', 'stor', 'publ')
+            
+        fit_parameters:
+            Coefficient:
+                np.log1p(area): 0.5346600058198113
+                np.log1p(average_value_per_unit): -0.10607533515285898
+                np.log1p(building_age): -0.0753020107703802
+                np.log1p(zonal_job_spaces): -0.29394076398195534
+                np.log1p(zonal_nonres_sqft_in_retl): -0.1570181278705974
+                np.log1p(zonal_office_jobs_per_acre): 0.4835859249689167
+                np.log1p(zonal_warehouse_and_transport_jobs): 0.8724106678545983
+                np.log1p(zonal_sb_jobs_sector53): -0.060697610769568366
+                np.log1p(zonal_income_group_3): 0.013052995415234943
+            Std. Error:
+                np.log1p(area): 0.0032180692676628264
+                np.log1p(average_value_per_unit): 0.007366494350762286
+                np.log1p(building_age): 0.0073668165445932975
+                np.log1p(zonal_job_spaces): 0.010604074187632954
+                np.log1p(zonal_nonres_sqft_in_retl): 0.0036313176487381754
+                np.log1p(zonal_office_jobs_per_acre): 0.008648933763517027
+                np.log1p(zonal_warehouse_and_transport_jobs): 0.007294729758214078
+                np.log1p(zonal_sb_jobs_sector53): 0.0035545769358344883
+                np.log1p(zonal_income_group_3): 0.0025598310126969163
+            T-Score:
+                np.log1p(area): 166.14310052067853
+                np.log1p(average_value_per_unit): -14.399703590607151
+                np.log1p(building_age): -10.221784445772082
+                np.log1p(zonal_job_spaces): -27.71960651923437
+                np.log1p(zonal_nonres_sqft_in_retl): -43.23998698520871
+                np.log1p(zonal_office_jobs_per_acre): 55.912779331110286
+                np.log1p(zonal_warehouse_and_transport_jobs): 119.59465213529514
+                np.log1p(zonal_sb_jobs_sector53): -17.075902945766096
+                np.log1p(zonal_income_group_3): 5.099162933213677
+        log_likelihoods:
+            convergence: -88297.780077912
+            'null': -151921.66964240366
+            ratio: 0.41879403849530406

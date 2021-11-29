@@ -1,0 +1,55 @@
+name: Office Price
+
+model_type: regression
+
+
+fit_filters:
+- area > 0
+- year_built > 1940
+- year_built < 2019
+- non_residential_sqft > 1000
+- building_type_name == 'off'
+- average_value_per_unit > 0
+
+
+predict_filters:
+- building_type_name == 'off'
+
+
+model_expression: np.log(average_value_per_unit) ~
+    np.log1p(zonal_avg_off_value) +
+    np.log1p(building_age) +
+    np.log1p(zonal_job_spaces) + np.log1p(retl_sb_jobs_cnt_hex_nbr)
+
+ytransform: np.exp
+
+
+fitted: true
+
+fit_parameters:
+    Coefficient:
+        Intercept: 1.53143708015886
+        np.log1p(zonal_avg_off_value): 0.726936980391859
+        np.log1p(building_age): -0.128741969288729
+        np.log1p(zonal_job_spaces): -0.0249769831267685
+        np.log1p(retl_sb_jobs_cnt_hex_nbr): 0.0396772542920281
+
+    Std. Error:
+        Intercept: 0.0570068982480596
+        np.log1p(zonal_avg_off_value): 0.00949289130759609
+        np.log1p(building_age): 0.00631109453745869
+        np.log1p(zonal_job_spaces): 0.00437626499988529
+        np.log1p(retl_sb_jobs_cnt_hex_nbr): 0.00365283682595696
+
+    T-Score:
+        Intercept: 26.864066055567
+        np.log1p(zonal_avg_off_value): 76.576983432874
+        np.log1p(building_age): -20.3993092679245
+        np.log1p(zonal_job_spaces): -5.70737446827904
+        np.log1p(retl_sb_jobs_cnt_hex_nbr): 10.8620385148558
+
+
+fit_rsquared_adj: 0.415581610882174
+
+
+fit_rsquared: 0.415786346698996

@@ -1,0 +1,60 @@
+name: test elcm wah 1
+
+model_expression: np.log1p(zonal_avg_rsf_value) + np.log1p(zonal_workers) + np.log1p(res_sqft_per_unit) +
+    np.log1p(zonal_wah_jobs) + np.log1p(zonal_res_hh) + np.log1p(wah_jobs_cnt_hex_nbr) + np.log1p(age_mean_hex_nbr)
+
+choosers_fit_size: 0.99999
+
+choosers_fit_filters:
+- holdback == 0
+- job_class == 'work at home'
+
+alternatives_fit_size: 30
+
+alternatives_fit_filters:
+- res_hh > 0
+- average_value_per_unit > 0
+
+alternatives_predict_filters:
+- res_hh > 0
+- average_value_per_unit > 0
+
+choosers_predict_filters:
+- building_id == -1
+
+alternatives_predict_size: 30
+
+predict_max_iterations: 100
+
+predict_sequential: false
+
+fit_parameters:
+    Coefficient:
+        np.log1p(zonal_avg_rsf_value): 0.05345559171423733
+        np.log1p(zonal_workers): -0.13588031219187613
+        np.log1p(res_sqft_per_unit): 0.036936997080331435
+        np.log1p(zonal_wah_jobs): 0.6788246443342434
+        np.log1p(zonal_res_hh): -0.5613978951407412
+        np.log1p(wah_jobs_cnt_hex_nbr): 0.12303325559099822
+        np.log1p(age_mean_hex_nbr): -0.35884169603609745
+    Std. Error:
+        np.log1p(zonal_avg_rsf_value): 0.008042794796282941
+        np.log1p(zonal_workers): 0.015772259348890986
+        np.log1p(res_sqft_per_unit): 0.006584872636950453
+        np.log1p(zonal_wah_jobs): 0.008021459455848411
+        np.log1p(zonal_res_hh): 0.01698913883743678
+        np.log1p(wah_jobs_cnt_hex_nbr): 0.005016353441182297
+        np.log1p(age_mean_hex_nbr): 0.026748687021665458
+    T-Score:
+        np.log1p(zonal_avg_rsf_value): 6.64639507387934
+        np.log1p(zonal_workers): -8.615145692581478
+        np.log1p(res_sqft_per_unit): 5.609371527258191
+        np.log1p(zonal_wah_jobs): 84.62607684681561
+        np.log1p(zonal_res_hh): -33.044517471577834
+        np.log1p(wah_jobs_cnt_hex_nbr): 24.52643280294873
+        np.log1p(age_mean_hex_nbr): -13.41530130975957
+
+log_likelihoods:
+    convergence: -304026.81999500224
+    'null': -310854.823711607
+    ratio: 0.02196524935684896

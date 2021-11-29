@@ -1,0 +1,57 @@
+name: Medical Price
+
+
+model_type: regression
+
+
+fit_filters:
+- area > 0
+- year_built > 1940
+- year_built < 2019
+- non_residential_sqft > 1000
+- building_type_name == 'med'
+- average_value_per_unit > 0
+
+
+predict_filters:
+- building_type_name == 'med'
+
+
+model_expression: np.log(average_value_per_unit) ~ 
+    np.log1p(zonal_avg_med_value) +
+    np.log1p(building_age) + np.log1p(avg_hhsize_hex_nbr) + 
+    np.log1p(age_mean_hex_nbr) + np.log1p(pct_income_group2_to_within15_OpAuto)
+
+ytransform: np.exp
+
+
+fitted: true
+
+fit_parameters:
+    Coefficient:
+        Intercept: 6.29995995732804
+        np.log1p(zonal_avg_med_value): 0.389712066117699
+        np.log1p(building_age): -0.14638213608306
+        np.log1p(pct_income_group2_to_within15_OpAuto): -1.16488895143831
+        np.log1p(age_mean_hex_nbr): -0.365620797079125
+        np.log1p(avg_hhsize_hex_nbr): -0.883467035810486
+
+    Std. Error:
+        Intercept: 0.366184576628628
+        np.log1p(zonal_avg_med_value): 0.0142429569687396
+        np.log1p(building_age): 0.0109039794401759
+        np.log1p(pct_income_group2_to_within15_OpAuto): 0.242869441246281
+        np.log1p(age_mean_hex_nbr): 0.0716548931228014
+        np.log1p(avg_hhsize_hex_nbr): 0.0991822512768012
+
+    T-Score:
+        Intercept: 17.2043290717764
+        np.log1p(zonal_avg_med_value): 27.3617386454959
+        np.log1p(building_age): -13.4246526129454
+        np.log1p(pct_income_group2_to_within15_OpAuto): -4.7963586751001
+        np.log1p(age_mean_hex_nbr): -5.10252379349067
+        np.log1p(avg_hhsize_hex_nbr): -8.90751141900254
+
+fit_rsquared_adj: 0.370453993066856
+
+fit_rsquared: 0.371741408213959

@@ -1,0 +1,72 @@
+name: Retail Price
+
+
+model_type: regression
+
+
+fit_filters:
+- area > 0
+- year_built > 1940
+- year_built < 2019
+- non_residential_sqft > 1000
+- building_type_name == 'retl'
+- average_value_per_unit > 0
+
+
+predict_filters:
+- building_type_name == 'retl'
+
+
+model_expression: np.log(average_value_per_unit) ~
+    np.log1p(zonal_avg_retl_value) +
+    np.log1p(building_age) +
+    np.log1p(zonal_vac_job_spaces_in_retl) +
+    np.log1p(zonal_avg_rsf_value) +
+    np.log1p(zonal_res_units_mh) +
+    np.log1p(vac_job_spaces_hex_nbr) +
+    np.log1p(bus_dist) +
+    np.log1p(zonal_retail_jobs)
+
+ytransform: np.exp
+
+
+fitted: true
+
+fit_parameters:
+    Coefficient:
+        Intercept: 2.21843949680795
+        np.log1p(zonal_avg_retl_value): 0.523119375029074
+        np.log1p(building_age): -0.266017253320729
+        np.log1p(zonal_vac_job_spaces_in_retl): -0.0270746325943399
+        np.log1p(zonal_avg_rsf_value): 0.103233846103468
+        np.log1p(zonal_res_units_mh): -0.0183095010200854
+        np.log1p(vac_job_spaces_hex_nbr): -0.0182605039995398
+        np.log1p(bus_dist): -0.0396889010561196
+        np.log1p(zonal_retail_jobs): 0.053945976465389
+
+    Std. Error:
+        Intercept: 0.118882849222046
+        np.log1p(zonal_avg_retl_value): 0.0105270708729788
+        np.log1p(building_age): 0.00638626157189289
+        np.log1p(zonal_vac_job_spaces_in_retl): 0.00380443091156444
+        np.log1p(zonal_avg_rsf_value): 0.00818833303870073
+        np.log1p(zonal_res_units_mh): 0.0020339555167603
+        np.log1p(vac_job_spaces_hex_nbr): 0.00530650061166526
+        np.log1p(bus_dist): 0.00288743045927551
+        np.log1p(zonal_retail_jobs): 0.00336928393096392
+
+    T-Score:
+        Intercept: 18.6607194504938
+        np.log1p(zonal_avg_retl_value): 49.6927760191901
+        np.log1p(building_age): -41.6546128476039
+        np.log1p(zonal_vac_job_spaces_in_retl): -7.11660514376549
+        np.log1p(zonal_avg_rsf_value): 12.6074312824785
+        np.log1p(zonal_res_units_mh): -9.00191811925606
+        np.log1p(vac_job_spaces_hex_nbr): -3.44115742856936
+        np.log1p(bus_dist): -13.7454049944732
+        np.log1p(zonal_retail_jobs): 16.0111102450055
+
+
+fit_rsquared_adj: 0.383206489965831
+
+fit_rsquared: 0.38345711715398

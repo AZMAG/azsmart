@@ -168,7 +168,36 @@ def register_h5_table(h5, table_name, prefix=None):
         full_table_name = '{}/{}'.format(prefix, table_name)
 
     def load_template():
-        with pd.HDFStore(h5, mode='r') as store:
-            return store[full_table_name]
+        return pd.read_hdf(h5, full_table_name)
 
     orca.add_table(table_name, load_template, cache=True, cache_scope='forever')
+
+
+def register_h5(h5, tables=None, prefix=None):
+    """
+    Register tables in an h5 store with orca.
+
+    Parameters:
+    -----------
+    h5: str
+        Full path to the h5.
+    tables: list of str, optional, default None
+        If provided, subset of tables to register.
+        If not provided, registers all tables.
+    prefix: str, optional, default None
+        If provided, only registers tables with the provided prefix/directory.
+        The prefix is stripped from the table name when loading into orca.
+
+    """
+    if prefix is None:
+        prefix = ''
+
+    if not prefix.startswith('/'):
+        prefix = '/' + prefix
+
+    if tables is None:
+        with pd.HDFStore(h5, mode='r') as store:
+            tables = [t.split('/')[-1] for t in store.keys() if t.startswith(prefix)]
+
+    for tab in tables:
+        register_h5_table(h5, tab, prefix)
